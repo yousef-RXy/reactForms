@@ -1,12 +1,19 @@
+import { useState } from "react";
+
 export default function Signup() {
+	const [passwordsAreNotEqual, setPasswordsAreNotEqual] = useState(false);
 	function handleSubmit(event) {
 		event.preventDefault();
+
 		const fd = new FormData(event.target);
 		const acquisitionChannel = fd.getAll("acquisition");
 		const data = Object.fromEntries(fd.entries());
 		data.acquisition = acquisitionChannel;
+		if (data.password !== data["confirm-password"]) {
+			setPasswordsAreNotEqual(true);
+			return;
+		}
 		console.log(data);
-		// event.target.reset();
 	}
 
 	return (
@@ -20,6 +27,7 @@ export default function Signup() {
 					id="email"
 					type="email"
 					name="email"
+					required
 				/>
 			</div>
 
@@ -30,6 +38,8 @@ export default function Signup() {
 						id="password"
 						type="password"
 						name="password"
+						required
+						minLength={6}
 					/>
 				</div>
 
@@ -39,7 +49,11 @@ export default function Signup() {
 						id="confirm-password"
 						type="password"
 						name="confirm-password"
+						required
 					/>
+					<div className="control-error">
+						{passwordsAreNotEqual && <p>Passwords must match.</p>}
+					</div>
 				</div>
 			</div>
 
@@ -52,6 +66,7 @@ export default function Signup() {
 						type="text"
 						id="first-name"
 						name="first-name"
+						required
 					/>
 				</div>
 
@@ -61,6 +76,7 @@ export default function Signup() {
 						type="text"
 						id="last-name"
 						name="last-name"
+						required
 					/>
 				</div>
 			</div>
@@ -70,6 +86,7 @@ export default function Signup() {
 				<select
 					id="role"
 					name="role"
+					required
 				>
 					<option value="student">Student</option>
 					<option value="teacher">Teacher</option>
@@ -118,6 +135,7 @@ export default function Signup() {
 						type="checkbox"
 						id="terms-and-conditions"
 						name="terms"
+						required
 					/>
 					I agree to the terms and conditions
 				</label>
